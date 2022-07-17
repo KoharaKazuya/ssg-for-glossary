@@ -1,0 +1,55 @@
+{
+  "name": "ssg-for-glossary",
+  "version": "0.1.0",
+  "license": "MIT",
+  "scripts": {
+    "build": "microbundle --target node --format esm,cjs",
+    "dev": "microbundle watch --target node --format esm,cjs"
+  },
+  "dependencies": {
+    "commander": "^9.4.0",
+    "fs-extra": "^10.1.0",
+    "glob": "^8.0.1",
+    "gray-matter": "^4.0.3",
+    "html-escaper": "^3.0.3",
+    "mdast-util-find-and-replace": "^2.1.0",
+    "mdast-util-to-string": "^3.1.0",
+    "rehype-stringify": "^9.0.3",
+    "remark-gfm": "^3.0.1",
+    "remark-parse": "^10.0.1",
+    "remark-rehype": "^10.1.0",
+    "unified": "^10.1.2",
+    "unist-builder": "^3.0.0"
+  },
+  "devDependencies": {
+    "@tsconfig/node14": "^1.0.1",
+    "@types/fs-extra": "^9.0.13",
+    "@types/glob": "^7.2.0",
+    "@types/html-escaper": "^3.0.0",
+    "@types/node": "^14.18.16",
+    "microbundle": "^0.15.0"
+  },
+  "type": "module",
+  "source": "src/ssg-for-glossary.ts",
+  "main": "./dist/ssg-for-glossary.cjs",
+  "module": "./dist/ssg-for-glossary.js",
+  "types": "./dist/ssg-for-glossary.d.ts",
+  "exports": {
+    "require": "./dist/ssg-for-glossary.cjs",
+    "import": "./dist/ssg-for-glossary.js",
+    "default": "./dist/ssg-for-glossary.js"
+  },
+  "bin": "./cli.js",
+  "files": [
+    "README",
+    "LICENSE",
+    "dist",
+    "cli.js"
+  ],
+  "keywords": [
+    "glossary",
+    "ssg",
+    "markdown"
+  ],
+  "repository": "github:KoharaKazuya/ssg-for-glossary"
+}

@@ -18,13 +18,17 @@ Markdown ファイルの先頭に用語のメタデータとなる [Front Matter
 
 | キー  | 説明                                                                               |
 | ----- | ---------------------------------------------------------------------------------- |
+| kana  | 用語の読み方。                                                                     |
 | alias | 用語の別名。リストで複数記載できる。ここに定義された単語でも自動リンクされる。     |
 | tag   | 用語の分類。リストで複数記載できる。ここに記載された単語の専用ページが生成される。 |
 
 **サンプル**
 
+`取説.md`
+
 ```md
 ---
+kana: とりせつ
 alias: 説明書
 tag:
   - 一般
@@ -50,39 +54,22 @@ $ npx ssg-for-glossary <用語の Markdown ファイルが格納されたディ�
 import { generate } from "ssg-for-glossary";
 
 async function main() {
-  await generate("<用語の Markdown ファイルが格納されたディレクトリ>");
+  await generate({
+    inputDir: "<用語の Markdown ファイルが格納されたディレクトリ>",
+  });
 }
 ```
 
+**カスタマイズ**
+
 ```javascript
-import { scan, read, write } from "ssg-for-glossary/fs";
-import { parse } from "ssg-for-glossary/parser";
-import { renderEntry, renderCollections } from "ssg-for-glossary/renderer";
+import { copy, scan, read, render, put } from "ssg-for-glossary";
 
-async function main() {
-  const files = await scan({
-    root: "<用語の Markdown ファイルが格納されたディレクトリ>",
-  });
-
-  const entries = await Promise.all(
-    files.map(async (file) => {
-      const content = await read(file);
-      const entry = await parse(content);
-      return entry;
-    })
-  );
-
-  await Promise.all([
-    ...entries.map(async (entry) => {
-      const page = await renderEntry({ entries, target: entry.id });
-      await write(`out/${page.path}.html`, page.content);
-    }),
-    (async () => {
-      const pages = await renderCollections({ entries });
-      await Promise.all(
-        pages.map((page) => write(`out/${page.path}.html`, page.content))
-      );
-    })(),
-  ]);
+async function generate({ inputDir, outputDir }) {
+  await copy(inputDir, outputDir);
+  const filePaths = await scan(inputDir);
+  const entries = await read(inputDir, filePaths);
+  const pages = await render(entries);
+  await put(outputDir, pages);
 }
 ```
